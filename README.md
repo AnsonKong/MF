@@ -1,50 +1,27 @@
-# React + TypeScript + Vite
+# module-federation-demo-2
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Reproduction steps:
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+`yarn`
 
-## Expanding the ESLint configuration
+`cd app1 & yarn & yarn start`
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+`cd app2 & yarn & yarn start`
 
-- Configure the top-level `parserOptions` property like this:
+and go `http://localhost:3001`, click the `print app2 config` button. will print current app2’s config. 
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+and then click the button above, the entry address of app3 and app4 will add to app2's mf_instance by **app1's init** 
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+I can control the app1's instance and app2's instance just use **app1's init** (window.__myInit),  that because the current app1 is not build via MF_Plugin.
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+
+and then we use `app1-via-build` to replace app1, `cd app1-via-build & yarn & yarn start`, and do the same steps above, but now, it's not work, that because the app1-via-build is build by MF_Plugin.
+
+
+
+This is what makes me confused, The only difference between app1 and app1-via-build is Whether compile&build through MF_Plugin.
+
+
+Need we should keep the behavior of these two cases consistent?
